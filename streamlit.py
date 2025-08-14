@@ -3,7 +3,7 @@
 import streamlit as st
 from langchain_core.messages import HumanMessage
 import os
-from graph import react_graph
+from graph import react_graph , set_api_key
 CONFIG = {'configurable': {'thread_id': 'thread-1'}}
 
 if 'message_history' not in st.session_state:
@@ -28,6 +28,10 @@ for message in st.session_state['message_history']:
 
 
 with st.sidebar:
+    api = st.text_input("API Key", type="password", placeholder="Enter your GEMINI API key")
+    if api:
+        st.session_state['api_key'] = api
+        set_api_key(api)
     st.header("Upload an Image")
     uploaded_file = st.file_uploader(
         "Choose an image...",
