@@ -4,7 +4,9 @@ google-genai
 gradio
 langgraph
 langchain
+langchain-core
+langchain_google_genai
 pytesseract
 pillow
-langchain_google_genai
+
 
