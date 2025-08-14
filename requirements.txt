@@ -8,5 +8,6 @@ langchain-core
 langchain_google_genai
 pytesseract
 pillow
+dotenv
 
 
