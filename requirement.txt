@@ -1,0 +1,10 @@
+transformers
+torch
+google-genai
+gradio
+langgraph
+langchain
+pytesseract
+pillow
+langchain_google_genai
+
