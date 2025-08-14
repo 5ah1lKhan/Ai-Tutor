@@ -3,7 +3,6 @@
 import streamlit as st
 from langchain_core.messages import HumanMessage
 import os
-from graph import react_graph , set_api_key
 CONFIG = {'configurable': {'thread_id': 'thread-1'}}
 
 if 'message_history' not in st.session_state:
@@ -29,9 +28,13 @@ for message in st.session_state['message_history']:
 
 with st.sidebar:
     api = st.text_input("API Key", type="password", placeholder="Enter your GEMINI API key")
+    if api.startswith('"') and api.endswith('"'):
+        api = api[1:-1]
     if api:
+        st.info(f"API key set successfully!")
         st.session_state['api_key'] = api
-        set_api_key(api)
+        os.environ['GEMINI_API_KEY'] = api
+        os.environ['GOOGLE_API_KEY'] = api
     st.header("Upload an Image")
     uploaded_file = st.file_uploader(
         "Choose an image...",
@@ -50,21 +53,25 @@ with st.sidebar:
             st.session_state['image_path'] = image_path
             st.session_state['message_history'].append({'role': 'image', 'content': image_path})
 
-user_input = st.chat_input('Type here')
-if user_input:
+if not os.getenv('GEMINI_API_KEY'):
+    st.warning("Please set your GEMINI API key in the sidebar.")
+else:
+    from graph import react_graph 
+    user_input = st.chat_input('Type here')
+    if user_input:
 
-    # first add the message to message_history
-    st.session_state['message_history'].append({'role': 'user', 'content': user_input})
-    with st.chat_message('user'):
-        st.text(user_input)
+        # first add the message to message_history
+        st.session_state['message_history'].append({'role': 'user', 'content': user_input})
+        with st.chat_message('user'):
+            st.text(user_input)
 
-    # first add the message to message_history
-    with st.chat_message('assistant'):
-        ai_message = st.write_stream(
-            message_chunk[0].content for message_chunk in react_graph.stream(
-                {"messages": [HumanMessage(content=f"user_input: {user_input}, image_path: {st.session_state['image_path']}")], "config": CONFIG},
-                config=CONFIG,
-                stream_mode='messages'
-            ) if message_chunk[1].get('langgraph_node') == 'assistant'
-        )
-    st.session_state['message_history'].append({'role': 'assistant', 'content': ai_message})
+        # first add the message to message_history
+        with st.chat_message('assistant'):
+            ai_message = st.write_stream(
+                message_chunk[0].content for message_chunk in react_graph.stream(
+                    {"messages": [HumanMessage(content=f"user_input: {user_input}, image_path: {st.session_state['image_path']}")], "config": CONFIG},
+                    config=CONFIG,
+                    stream_mode='messages'
+                ) if message_chunk[1].get('langgraph_node') == 'assistant'
+            )
+        st.session_state['message_history'].append({'role': 'assistant', 'content': ai_message})

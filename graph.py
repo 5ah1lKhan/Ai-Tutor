@@ -12,17 +12,14 @@ import os
 from PIL import Image
 from google import genai
 import streamlit as st
-# from dotenv import load_dotenv
-# load_dotenv()
+from dotenv import load_dotenv
+load_dotenv()
 # GEMINI_API_KEY = os.getenv('GOOGLE_API_KEY')
 # if 'GOOGLE_API_KEY' in st.secrets:
 #         GEMINI_API_KEY = st.secrets['GOOGLE_API_KEY']
-GEMINI_API_KEY = ""
-def set_api_key(api_key):
-    """Set the API key for Google Gemini."""
-    global GEMINI_API_KEY
-    GEMINI_API_KEY = api_key
-client = genai.Client(api_key=GEMINI_API_KEY)
+# GEMINI_API_KEY = ""
+
+client = genai.Client(api_key=os.getenv('GEMINI_API_KEY'))
 
 #tools
 llm = ChatGoogleGenerativeAI(
