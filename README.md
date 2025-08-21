@@ -67,7 +67,6 @@ pip install -r requirement.txt
 2. Add your API key:
    ```toml
    GOOGLE_API_KEY = "YOUR_GOOGLE_API_KEY"
-   GEMINI_API_KEY = "YOUR_GOOGLE_API_KEY"
    ```
 
 Alternatively, you can enter your API key in the Streamlit sidebar when the app launches.
@@ -79,7 +78,7 @@ Alternatively, you can enter your API key in the Streamlit sidebar when the app 
 source .venv/bin/activate
 
 # Run Streamlit
-streamlit run frontend/app.py
+streamlit run Ai_tutor.py
 ```
 
 The app will be available at http://localhost:8501.
