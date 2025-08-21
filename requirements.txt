@@ -9,5 +9,5 @@ langchain_google_genai
 pytesseract
 pillow
 dotenv
-
-
+langgraph-checkpoint-sqlite
+scikit-learn
